@@ -1,4 +1,4 @@
-export interface FormData {
+export interface BusinessFormData {
   businessName: string
   businessDescription: string
   industry: string
