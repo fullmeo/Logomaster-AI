@@ -1,1 +1,12 @@
-export default function NotFound(): JSX.Element {\n  return (\n    <div style={{ textAlign: 'center', padding: '4rem' }}>\n      <div style={{ fontSize: '5rem' }}>🤖</div>\n      <h1>404 – Page introuvable</h1>\n      <p>Notre assistant IA a cherché partout… mais cette page n’existe pas.</p>\n      <a href="/" style={{ color: '#2563eb', textDecoration: 'underline' }}>\n        Retour à l'accueil\n      </a>\n    </div>\n  );\n}
+export default function NotFound(): JSX.Element {
+  return (
+    <div style={{ textAlign: 'center', padding: '4rem' }}>
+      <div style={{ fontSize: '5rem' }}>🤖</div>
+      <h1>404 – Page introuvable</h1>
+      <p>Notre assistant IA a cherché partout… mais cette page n’existe pas.</p>
+      <a href="/" style={{ color: '#2563eb', textDecoration: 'underline' }}>
+        Retour à l'accueil
+      </a>
+    </div>
+  );
+}
