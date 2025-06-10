@@ -11,7 +11,7 @@ import AlchemicalEngine from '../legacy/alchemical_algorithm.js'
 import PinelKabbalisticEngine from '../legacy/kabbalistic_algorithm.js'
 import UniversalMorphicEngine from '../legacy/morphic_resonance_algorithm.js'
 
-import type { FormData, LogoData } from '../types'
+import type { BusinessFormData, LogoData } from '../types'
 
 export interface HermeticAnalysis {
   alchemical: {
@@ -51,7 +51,7 @@ export class HermeticTrinitEngine {
    * ANALYSE HERMÉTIQUE COMPLÈTE
    * Application de la Trinité sur un projet d'entreprise
    */
-  async analyzeHermetically(formData: FormData): Promise<HermeticAnalysis> {
+  async analyzeHermetically(formData: BusinessFormData): Promise<HermeticAnalysis> {
     console.log("🔥 Début de l'Analyse Hermétique Trinité...")
     
     // Préparation des inputs pour chaque pilier
@@ -111,7 +111,7 @@ export class HermeticTrinitEngine {
    * GÉNÉRATION SVG HERMÉTIQUE
    * Création de logos selon les correspondances sacrées
    */
-  async generateHermeticLogo(analysis: HermeticAnalysis, formData: FormData): Promise<LogoData> {
+  async generateHermeticLogo(analysis: HermeticAnalysis, formData: BusinessFormData): Promise<LogoData> {
     console.log("🎨 Génération SVG selon les Correspondances Hermétiques...")
     
     // Extraction des directives de création
@@ -249,7 +249,7 @@ export class HermeticTrinitEngine {
     kabbalisticSVG: string, 
     morphicSVG: string,
     trinity: any,
-    formData: FormData
+    formData: BusinessFormData
   ): string {
     const size = 320
     const center = size / 2
@@ -488,7 +488,7 @@ export class HermeticTrinitEngine {
 'use client'
 import { useState } from 'react'
 import { HermeticTrinitEngine, type HermeticAnalysis } from '@/lib/wrappers/HermeticTrinity'
-import type { FormData, LogoData, QualityAnalysis, GenerationState } from '@/lib/types'
+import type { BusinessFormData, LogoData, QualityAnalysis, GenerationState } from '@/lib/types'
 
 export function useHermeticGeneration() {
   const [hermeticEngine] = useState(() => new HermeticTrinitEngine())
@@ -500,7 +500,7 @@ export function useHermeticGeneration() {
     progress: 0
   })
 
-  const generateHermeticLogo = async (formData: FormData) => {
+  const generateHermeticLogo = async (formData: BusinessFormData) => {
     try {
       // Séquence d'animation hermétique
       await simulateHermeticGeneration(setGenerationState)
@@ -565,7 +565,7 @@ import { useHermeticGeneration } from '@/hooks/useHermeticGeneration'
 import type { FormData } from '@/lib/types'
 
 export default function HermeticLogoPage() {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<BusinessFormData>({
     businessName: '',
     businessDescription: '',
     industry: 'tech',
