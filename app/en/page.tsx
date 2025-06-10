@@ -1,0 +1,1 @@
+export default function Page(): JSX.Element {\n  return (\n    <main style={{ padding: '2rem' }}>\n      <h1>Welcome to Logomaster AI</h1>\n      <p>\n        Create unique, professional-grade logos in seconds with the power of artificial intelligence.\n      </p>\n    </main>\n  );\n}
