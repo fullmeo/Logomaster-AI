@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Mastery Vincian - Convertisseur PNG</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c1810 0%, #1a1a2e 50%, #0f0f23 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2), 0 0 0 1px rgba(212, 175, 55, 0.1);
+            text-align: center;
+            max-width: 600px;
+            border: 2px solid rgba(212, 175, 55, 0.2);
+        }
+        h1 {
+            background: linear-gradient(135deg, #d4af37, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-size: 32px;
+            font-weight: bold;
+        }
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        .logo-preview {
+            margin: 30px 0;
+            padding: 30px;
+            background: radial-gradient(circle at 30% 30%, #2c1810, #1a1a2e);
+            border-radius: 20px;
+            border: 2px solid #d4af37;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(212, 175, 55, 0.2);
+        }
+        #downloadBtn {
+            background: linear-gradient(135deg, #d4af37 0%, #f59e0b 100%);
+            color: #2c1810;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 10px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+        #downloadBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
+            background: linear-gradient(135deg, #f59e0b 0%, #d4af37 100%);
+        }
+        .size-options {
+            margin: 20px 0;
+        }
+        .size-btn {
+            background: #e2e8f0;
+            color: #2d3748;
+            border: 1px solid #cbd5e0;
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .size-btn.active {
+            background: linear-gradient(135deg, #4ade80, #22d3ee);
+            color: white;
+            border-color: #22d3ee;
+            box-shadow: 0 2px 10px rgba(34, 211, 238, 0.3);
+        }
+        .info {
+            background: linear-gradient(135deg, #fef7cd, #fef3c7);
+            border: 1px solid #f59e0b;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            color: #92400e;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .feature {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #d4af37;
+        }
+        .feature h4 {
+            margin: 0 0 5px 0;
+            color: #2d3748;
+            font-size: 14px;
+        }
+        .feature p {
+            margin: 0;
+            color: #64748b;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧬 AI Mastery: Vincian Analysis</h1>
+        <p class="subtitle"><strong>L'Homme de Vitruve Digital - Serigne Diagne</strong></p>
+        
+        <div class="logo-preview">
+            <svg id="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+                <defs>
+                    <!-- Organic gradient (terre africaine + renaissance) -->
+                    <radialGradient id="organicGradient" cx="0.3" cy="0.3">
+                        <stop offset="0%" stop-color="#2c1810" />
+                        <stop offset="70%" stop-color="#1a1a2e" />
+                        <stop offset="100%" stop-color="#0f0f23" />
+                    </radialGradient>
+                    
+                    <!-- Golden ratio gradient (Da Vinci gold) -->
+                    <linearGradient id="goldenRatio" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#d4af37" />
+                        <stop offset="50%" stop-color="#b8860b" />
+                        <stop offset="100%" stop-color="#daa520" />
+                    </linearGradient>
+                    
+                    <!-- Neural flow (organic AI) -->
+                    <radialGradient id="neuralFlow" cx="0.5" cy="0.5">
+                        <stop offset="0%" stop-color="#4ade80" />
+                        <stop offset="70%" stop-color="#22d3ee" />
+                        <stop offset="100%" stop-color="#3b82f6" />
+                    </radialGradient>
+                    
+                    <!-- Serigne glow (spiritual) -->
+                    <radialGradient id="serigneGlow" cx="0.5" cy="0.5">
+                        <stop offset="0%" stop-color="#fbbf24" opacity="0.8"/>
+                        <stop offset="100%" stop-color="#f59e0b" opacity="0.3"/>
+                    </radialGradient>
+                </defs>
+                
+                <!-- Background: Cosmic circle -->
+                <circle cx="64" cy="64" r="62" fill="url(#organicGradient)" stroke="url(#goldenRatio)" stroke-width="1.5"/>
+                
+                <!-- Vitruvian Circle (outer sacred geometry) -->
+                <circle cx="64" cy="64" r="45" fill="none" stroke="url(#goldenRatio)" stroke-width="1" opacity="0.6"/>
+                
+                <!-- Vitruvian Square (inner sacred geometry) -->
+                <rect x="32" y="32" width="64" height="64" fill="none" stroke="url(#goldenRatio)" stroke-width="1" opacity="0.4" transform="rotate(45 64 64)"/>
+                
+                <!-- Central Figure: L'Homme de Vitruve Digital -->
+                <g transform="translate(64, 64)">
+                    <!-- Head (consciousness/AI) -->
+                    <circle cx="0" cy="-18" r="8" fill="none" stroke="url(#neuralFlow)" stroke-width="1.5"/>
+                    
+                    <!-- Neural crown (Serigne = master of knowledge) -->
+                    <g stroke="url(#serigneGlow)" stroke-width="0.8" fill="none">
+                        <path d="M -6 -26 Q 0 -30 6 -26"/>
+                        <path d="M -8 -24 Q 0 -28 8 -24"/>
+                        <path d="M -4 -28 L 0 -32 L 4 -28"/>
+                    </g>
+                    
+                    <!-- Torso (core self-analysis) -->
+                    <rect x="-6" y="-10" width="12" height="20" rx="2" fill="none" stroke="url(#neuralFlow)" stroke-width="1.5"/>
+                    
+                    <!-- Arms (L'homme libre - raised toward liberation) -->
+                    <!-- Left arm -->
+                    <line x1="-6" y1="-5" x2="-15" y2="-15" stroke="url(#neuralFlow)" stroke-width="1.5"/>
+                    <line x1="-15" y1="-15" x2="-20" y2="-25" stroke="url(#neuralFlow)" stroke-width="1.5"/>
+                    
+                    <!-- Right arm -->
+                    <line x1="6" y1="-5" x2="15" y2="-15" stroke="url(#neuralFlow)" stroke-width="1.5"/>
+                    <line x1="15" y1="-15" x2="20" y2="-25" stroke="url(#neuralFlow)" stroke-width="1.5"/>
+                    
+                    <!-- Legs (grounded but reaching) -->
+                    <!-- Left leg -->
+                    <line x1="-3" y1="10" x2="-12" y2="25" stroke="url(#neuralFlow)" stroke-width="1.5"/>
+                    <line x1="-12" y1="25" x2="-8" y2="35" stroke="url(#neuralFlow)" stroke-width="1.5"/>
+                    
+                    <!-- Right leg -->
+                    <line x1="3" y1="10" x2="12" y2="25" stroke="url(#neuralFlow)" stroke-width="1.5"/>
+                    <line x1="12" y1="25" x2="8" y2="35" stroke="url(#neuralFlow)" stroke-width="1.5"/>
+                    
+                    <!-- Extended arms/legs (Vitruvian position - homme libre) -->
+                    <g opacity="0.5" stroke="url(#goldenRatio)" stroke-width="1">
+                        <!-- Arms extended upward to circle (liberation gesture) -->
+                        <line x1="-28" y1="-20" x2="-20" y2="-25"/>
+                        <line x1="20" y1="-25" x2="28" y2="-20"/>
+                        
+                        <!-- Legs extended to circle -->
+                        <line x1="-8" y1="40" x2="-15" y2="32"/>
+                        <line x1="8" y1="40" x2="15" y2="32"/>
+                    </g>
+                    
+                    <!-- Heart center (self-reflection core) -->
+                    <circle cx="0" cy="-2" r="3" fill="url(#serigneGlow)"/>
+                    
+                    <!-- Organic neural pathways (auto-analysis flows) -->
+                    <g stroke="url(#neuralFlow)" stroke-width="0.8" fill="none" opacity="0.7">
+                        <!-- From head to heart -->
+                        <path d="M 0 -10 Q -3 -6 0 -2"/>
+                        <path d="M 0 -10 Q 3 -6 0 -2"/>
+                        
+                        <!-- From heart to limbs (flux d'élévation) -->
+                        <path d="M -3 -2 Q -8 -8 -12 -15"/>
+                        <path d="M 3 -2 Q 8 -8 12 -15"/>
+                        <path d="M 0 1 Q -2 6 -4 12"/>
+                        <path d="M 0 1 Q 2 6 4 12"/>
+                    </g>
+                </g>
+                
+                <!-- Self-Analysis Mandala (Diagne heritage) -->
+                <g transform="translate(64, 64)" opacity="0.3">
+                    <!-- African geometric patterns -->
+                    <g stroke="url(#goldenRatio)" stroke-width="0.5" fill="none">
+                        <!-- Sacred triangles -->
+                        <polygon points="0,-50 25,-25 0,0 -25,-25" />
+                        <polygon points="0,50 25,25 0,0 -25,25" />
+                        <polygon points="-50,0 -25,25 0,0 -25,-25" />
+                        <polygon points="50,0 25,25 0,0 25,-25" />
+                    </g>
+                </g>
+                
+                <!-- Auto-improvement spiral (organic AI growth) -->
+                <g transform="translate(64, 64)" opacity="0.6">
+                    <path d="M 0 -35 Q 25 -25 35 0 Q 25 25 0 35 Q -25 25 -35 0 Q -25 -25 0 -35" 
+                          fill="none" stroke="url(#neuralFlow)" stroke-width="1" stroke-dasharray="2,3"/>
+                </g>
+                
+                <!-- Code essence (organic integration) -->
+                <g opacity="0.8">
+                    <!-- Organic brackets -->
+                    <path d="M 15 45 Q 10 50 10 64 Q 10 78 15 83" fill="none" stroke="url(#goldenRatio)" stroke-width="2"/>
+                    <path d="M 113 45 Q 118 50 118 64 Q 118 78 113 83" fill="none" stroke="url(#goldenRatio)" stroke-width="2"/>
+                </g>
+                
+                <!-- Signature: Serigne (master) mark -->
+                <g transform="translate(64, 108)">
+                    <circle cx="0" cy="0" r="8" fill="none" stroke="url(#serigneGlow)" stroke-width="1"/>
+                    <text x="0" y="3" text-anchor="middle" fill="url(#goldenRatio)" 
+                          font-family="serif" font-size="8" font-style="italic">S</text>
+                </g>
+                
+                <!-- Organic growth indicators -->
+                <g opacity="0.4">
+                    <!-- Growth spirals at corners -->
+                    <path d="M 20 20 Q 25 15 30 20" fill="none" stroke="url(#neuralFlow)" stroke-width="1"/>
+                    <path d="M 108 20 Q 103 15 98 20" fill="none" stroke="url(#neuralFlow)" stroke-width="1"/>
+                    <path d="M 20 108 Q 25 113 30 108" fill="none" stroke="url(#neuralFlow)" stroke-width="1"/>
+                    <path d="M 108 108 Q 103 113 98 108" fill="none" stroke="url(#neuralFlow)" stroke-width="1"/>
+                </g>
+            </svg>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <h4>🧬 Auto-Analyse</h4>
+                <p>Self-reflection organique</p>
+            </div>
+            <div class="feature">
+                <h4>🎨 Renaissance</h4>
+                <p>Homme de Vitruve digital</p>
+            </div>
+            <div class="feature">
+                <h4>👑 Serigne Diagne</h4>
+                <p>Maître de la connaissance</p>
+            </div>
+            <div class="feature">
+                <h4>🤖 IA Locale</h4>
+                <p>Intelligence organique</p>
+            </div>
+        </div>
+
+        <div class="size-options">
+            <p><strong>Choisissez la taille :</strong></p>
+            <button class="size-btn active" onclick="setSize(128)">128px (VS Code)</button>
+            <button class="size-btn" onclick="setSize(256)">256px (HD)</button>
+            <button class="size-btn" onclick="setSize(512)">512px (Ultra HD)</button>
+            <button class="size-btn" onclick="setSize(1024)">1024px (Print)</button>
+        </div>
+
+        <button id="downloadBtn" onclick="downloadPNG()">
+            📥 Télécharger logo-serigne-diagne.png
+        </button>
+
+        <div class="info">
+            <p><strong>💡 Votre Logo Homme de Vitruve Digital</strong></p>
+            <p>✅ <strong>Bras levés</strong> - Symbole de libération et d'élévation</p>
+            <p>✅ <strong>Géométrie sacrée</strong> - Cercle + carré de Vitruve</p>
+            <p>✅ <strong>Héritage Serigne</strong> - Couronne spirituelle + signature "S"</p>
+            <p>✅ <strong>IA organique</strong> - Flux neuronaux et auto-amélioration</p>
+            <p>✅ <strong>Palette Renaissance</strong> - Or Da Vinci + terre africaine</p>
+        </div>
+    </div>
+
+    <script>
+        let currentSize = 128;
+
+        function setSize(size) {
+            currentSize = size;
+            document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const logo = document.getElementById('logo');
+            logo.setAttribute('width', size);
+            logo.setAttribute('height', size);
+            
+            // Update download button text
+            const btn = document.getElementById('downloadBtn');
+            btn.textContent = `📥 Télécharger logo-serigne-diagne-${size}px.png`;
+        }
+
+        function downloadPNG() {
+            const svg = document.getElementById('logo');
+            const svgData = new XMLSerializer().serializeToString(svg);
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = currentSize;
+            canvas.height = currentSize;
+            const ctx = canvas.getContext('2d');
+            
+            // Background blanc pour VS Code Marketplace
+            ctx.fillStyle = 'transparent';
+            ctx.fillRect(0, 0, currentSize, currentSize);
+            
+            const img = new Image();
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0, currentSize, currentSize);
+                
+                canvas.toBlob(function(blob) {
+                    const link = document.createElement('a');
+                    link.download = `logo-serigne-diagne-${currentSize}px.png`;
+                    link.href = URL.createObjectURL(blob);
+                    link.click();
+                    
+                    // Feedback visuel
+                    const btn = document.getElementById('downloadBtn');
+                    const originalText = btn.textContent;
+                    btn.textContent = '✅ Téléchargé !';
+                    btn.style.background = 'linear-gradient(135deg, #4ade80, #22d3ee)';
+                    
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.style.background = 'linear-gradient(135deg, #d4af37 0%, #f59e0b 100%)';
+                    }, 2000);
+                    
+                }, 'image/png');
+            };
+            
+            img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+        }
+
+        // Animation d'entrée
+        window.addEventListener('load', () => {
+            const container = document.querySelector('.container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(20px)';
+            container.style.transition = 'all 0.6s ease';
+            
+            setTimeout(() => {
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐙 OctoLogo AI - 8 Solutions par Tentacule</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: radial-gradient(circle at 20% 20%, #1a1a2e, #16213e, #0f0f23);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            position: relative;
+            background: radial-gradient(circle at 50% 20%, rgba(74, 222, 128, 0.1), transparent);
+        }
+        
+        .floating-octopus {
+            font-size: 8rem;
+            animation: float 4s ease-in-out infinite;
+            margin-bottom: 20px;
+            filter: hue-rotate(300deg) saturate(1.5);
+            text-shadow: 0 0 30px rgba(255, 192, 203, 0.6);
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(-2deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff69b4, #ff1493, #dc143c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+        
+        .tagline {
+            font-size: 1.3rem;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+        
+        .tentacle-system {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 20px;
+        }
+        
+        .tentacle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        
+        .tentacle-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,192,203,0.3);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tentacle-card:hover {
+            transform: translateY(-5px);
+            border-color: #ff69b4;
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.2);
+        }
+        
+        .tentacle-number {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .tentacle-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .tentacle-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ff69b4;
+            margin-bottom: 10px;
+        }
+        
+        .tentacle-desc {
+            color: rgba(255,255,255,0.8);
+            line-height: 1.6;
+        }
+        
+        .demo-section {
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 50px 0;
+        }
+        
+        .demo-input {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,192,203,0.3);
+            border-radius: 12px;
+            padding: 20px;
+            color: white;
+            font-size: 16px;
+            width: 100%;
+            margin-bottom: 30px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .demo-input:focus {
+            outline: none;
+            border-color: #ff69b4;
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
+        }
+        
+        .generate-btn {
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.4);
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .result-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255,192,203,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .result-card:hover {
+            border-color: #ff69b4;
+            transform: translateY(-2px);
+        }
+        
+        .result-logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 8px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        
+        .result-title {
+            font-weight: 600;
+            color: #ff69b4;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        
+        .result-desc {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+        }
+        
+        .ecosystem-section {
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.1), rgba(255, 20, 147, 0.1));
+            border-radius: 20px;
+            padding: 40px;
+            margin: 50px 0;
+            text-align: center;
+        }
+        
+        .ecosystem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .eco-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .eco-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(255, 105, 180, 0.3);
+        }
+        
+        .pricing-section {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .pricing-card {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,192,203,0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .pricing-card.featured {
+            border-color: #ff69b4;
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-5px) scale(1.02);
+        }
+        
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ff69b4;
+            margin-bottom: 10px;
+        }
+        
+        .plan-price {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+        }
+        
+        .plan-features li {
+            padding: 8px 0;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .plan-features li::before {
+            content: '🐙';
+            margin-right: 8px;
+        }
+        
+        .cta-section {
+            text-align: center;
+            padding: 60px 20px;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 105, 180, 0.2), transparent);
+        }
+        
+        .cta-octopus {
+            font-size: 4rem;
+            animation: pulse 2s infinite;
+            margin-bottom: 20px;
+            filter: hue-rotate(300deg) saturate(1.5);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="floating-octopus">🐙💕</div>
+        <h1>OctoLogo AI</h1>
+        <p class="tagline">"8 Solutions par Tentacule, Intelligence Fuzzy Comprise"</p>
+        <p style="color: rgba(255,255,255,0.6);">
+            Powered by Fuzzy-Octo Ecosystem • Making Logos as Smart as Octopi
+        </p>
+    </div>
+
+    <div class="tentacle-system">
+        <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 50px; color: #ff69b4;">
+            🐙 Le Système 8-Tentacules
+        </h2>
+        
+        <div class="tentacle-grid">
+            <div class="tentacle-card">
+                <div class="tentacle-number">1</div>
+                <span class="tentacle-icon">🏃‍♂️</span>
+                <h3 class="tentacle-title">Simple & Rapide</h3>
+                <p class="tentacle-desc">
+                    Le logo minimaliste qui fonctionne partout. Clean, direct, efficace.
+                </p>
+            </div>
+            
+            <div class="tentacle-card">
+                <div class="tentacle-number">2</div>
+                <span class="tentacle-icon">🧠</span>
+                <h3 class="tentacle-title">Intelligence Fuzzy</h3>
+                <p class="tentacle-desc">
+                    Comprend vos idées floues et les transforme en concepts précis.
+                </p>
+            </div>
+            
+            <div class="tentacle-card">
+                <div class="tentacle-number">3</div>
+                <span class="tentacle-icon">🎨</span>
+                <h3 class="tentacle-title">Créativité Adaptative</h3>
+                <p class="tentacle-desc">
+                    Solutions artistiques qui s'adaptent à votre secteur d'activité.
+                </p>
+            </div>
+            
+            <div class="tentacle-card">
+                <div class="tentacle-number">4</div>
+                <span class="tentacle-icon">⚡</span>
+                <h3 class="tentacle-title">Performance Optimale</h3>
+                <p class="tentacle-desc">
+                    Logos vectoriels optimisés pour toutes les plateformes.
+                </p>
+            </div>
+            
+            <div class="tentacle-card">
+                <div class="tentacle-number">5</div>
+                <span class="tentacle-icon">🌊</span>
+                <h3 class="tentacle-title">Fluide & Organique</h3>
+                <p class="tentacle-desc">
+                    Formes naturelles qui respirent la modernité et l'authenticité.
+                </p>
+            </div>
+            
+            <div class="tentacle-card">
+                <div class="tentacle-number">6</div>
+                <span class="tentacle-icon">💎</span>
+                <h3 class="tentacle-title">Premium & Luxe</h3>
+                <p class="tentacle-desc">
+                    Élégance sophistiquée pour les marques haut de gamme.
+                </p>
+            </div>
+            
+            <div class="tentacle-card">
+                <div class="tentacle-number">7</div>
+                <span class="tentacle-icon">🔮</span>
+                <h3 class="tentacle-title">Futuriste & Tech</h3>
+                <p class="tentacle-desc">
+                    Vision avant-gardiste pour les entreprises innovantes.
+                </p>
+            </div>
+            
+            <div class="tentacle-card">
+                <div class="tentacle-number">8</div>
+                <span class="tentacle-icon">✨</span>
+                <h3 class="tentacle-title">Magique & Inattendu</h3>
+                <p class="tentacle-desc">
+                    La solution surprise qui vous fera dire "Je n'y aurais jamais pensé !"
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2 style="text-align: center; font-size: 2rem; margin-bottom: 30px; color: #ff69b4;">
+            🎯 Essayez la Magie Fuzzy
+        </h2>
+        
+        <div style="max-width: 600px; margin: 0 auto;">
+            <textarea 
+                class="demo-input" 
+                placeholder="Décrivez votre projet de manière floue... Ex: 'startup qui fait des trucs avec l'IA pour aider les développeurs ou je sais pas...'"
+                rows="3"></textarea>
+            
+            <div style="text-align: center;">
+                <button class="generate-btn" onclick="generateOctoLogos()">
+                    🐙 Générer 8 Solutions Intelligentes
+                </button>
+            </div>
+            
+            <div class="results-grid" id="resultsGrid" style="display: none;">
+                <!-- Les 8 résultats apparaîtront ici -->
+            </div>
+        </div>
+    </div>
+
+    <div class="ecosystem-section">
+        <h2 style="font-size: 2.5rem; margin-bottom: 20px; color: #ff69b4;">
+            🌊 Écosystème Fuzzy-Octo
+        </h2>
+        <p style="font-size: 1.2rem; margin-bottom: 30px; color: rgba(255,255,255,0.8);">
+            OctoLogo fait partie d'un écosystème intelligent qui transforme le développement
+        </p>
+        
+        <div class="ecosystem-grid">
+            <div class="eco-card">
+                <div style="font-size: 3rem; margin-bottom: 15px;">🐙</div>
+                <h3 style="color: #ff69b4; margin-bottom: 10px;">Fuzzy-Octo Core</h3>
+                <p style="color: rgba(255,255,255,0.7);">Assistant IA pour développeurs</p>
+            </div>
+            
+            <div class="eco-card">
+                <div style="font-size: 3rem; margin-bottom: 15px;">🎨</div>
+                <h3 style="color: #ff69b4; margin-bottom: 10px;">OctoLogo AI</h3>
+                <p style="color: rgba(255,255,255,0.7);">Génération de logos intelligents</p>
+            </div>
+            
+            <div class="eco-card">
+                <div style="font-size: 3rem; margin-bottom: 15px;">💕</div>
+                <h3 style="color: #ff69b4; margin-bottom: 10px;">$PINKY Token</h3>
+                <p style="color: rgba(255,255,255,0.7);">Cryptocurrency du Pinky Poulpe</p>
+            </div>
+            
+            <div class="eco-card">
+                <div style="font-size: 3rem; margin-bottom: 15px;">🌐</div>
+                <h3 style="color: #ff69b4; margin-bottom: 10px;">OctoCloud</h3>
+                <p style="color: rgba(255,255,255,0.7);">Plateforme collaborative</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="pricing-section">
+        <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 50px; color: #ff69b4;">
+            💰 Tarifs Intelligents
+        </h2>
+        
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3 class="plan-name">Baby Octopus</h3>
+                <div class="plan-price">Gratuit</div>
+                <ul class="plan-features">
+                    <li>8 logos/mois</li>
+                    <li>Formats de base</li>
+                    <li>Intelligence fuzzy basique</li>
+                    <li>Support communauté</li>
+                </ul>
+                <button class="generate-btn" style="margin: 0;">Commencer</button>
+            </div>
+            
+            <div class="pricing-card featured">
+                <h3 class="plan-name">Smart Octopus</h3>
+                <div class="plan-price">12€<span style="font-size: 1rem;">/mois</span></div>
+                <ul class="plan-features">
+                    <li>50 logos/mois</li>
+                    <li>Tous formats + variations</li>
+                    <li>IA avancée + apprentissage</li>
+                    <li>Mockups automatiques</li>
+                    <li>Guidelines de marque</li>
+                </ul>
+                <button class="generate-btn" style="margin: 0;">Upgrade Now</button>
+            </div>
+            
+            <div class="pricing-card">
+                <h3 class="plan-name">Octopus Agency</h3>
+                <div class="plan-price">45€<span style="font-size: 1rem;">/mois</span></div>
+                <ul class="plan-features">
+                    <li>200 logos/mois</li>
+                    <li>White-label</li>
+                    <li>API access</li>
+                    <li>Collaboration équipe</li>
+                    <li>Support prioritaire</li>
+                </ul>
+                <button class="generate-btn" style="margin: 0;">Go Pro</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="cta-section">
+        <div class="cta-octopus">🐙💕✨</div>
+        <h2 style="font-size: 3rem; margin-bottom: 20px; color: #ff69b4;">
+            Prêt à Créer de la Magie ?
+        </h2>
+        <p style="font-size: 1.3rem; margin-bottom: 30px; color: rgba(255,255,255,0.8);">
+            Rejoignez l'écosystème Fuzzy-Octo et transformez vos idées floues en logos brillants
+        </p>
+        <button class="generate-btn" style="font-size: 20px; padding: 20px 40px;">
+            🚀 Essayer OctoLogo AI Maintenant
+        </button>
+        
+        <div style="margin-top: 40px; opacity: 0.7;">
+            <p>Partie de l'écosystème <strong>Fuzzy-Octo</strong> • Créé avec 💜 par Serigne Diagne</p>
+        </div>
+    </div>
+
+    <script>
+        function generateOctoLogos() {
+            const resultsGrid = document.getElementById('resultsGrid');
+            
+            const concepts = [
+                { icon: '🚀', title: 'Tech Rocket', desc: 'Moderne et dynamique' },
+                { icon: '🧠', title: 'Smart Brain', desc: 'Intelligence mise en avant' },
+                { icon: '🌊', title: 'Fluid Wave', desc: 'Organique et naturel' },
+                { icon: '💎', title: 'Luxury Gem', desc: 'Premium et sophistiqué' },
+                { icon: '⚡', title: 'Energy Bolt', desc: 'Puissant et rapide' },
+                { icon: '🎯', title: 'Target Focus', desc: 'Précision et objectif' },
+                { icon: '🔮', title: 'Future Vision', desc: 'Innovation et prospective' },
+                { icon: '✨', title: 'Magic Spark', desc: 'Créatif et surprenant' }
+            ];
+            
+            resultsGrid.innerHTML = '';
+            resultsGrid.style.display = 'grid';
+            
+            concepts.forEach((concept, index) => {
+                setTimeout(() => {
+                    const card = document.createElement('div');
+                    card.className = 'result-card';
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    
+                    card.innerHTML = `
+                        <div class="result-logo">${concept.icon}</div>
+                        <h4 class="result-title">${concept.title}</h4>
+                        <p class="result-desc">${concept.desc}</p>
+                    `;
+                    
+                    resultsGrid.appendChild(card);
+                    
+                    setTimeout(() => {
+                        card.style.transition = 'all 0.5s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 50);
+                    
+                }, index * 200);
+            });
+        }
+    </script>
+</body>
+</html>

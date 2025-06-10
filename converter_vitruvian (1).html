@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Serigne Diagne - Convertisseur PNG</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+        }
+        h1 {
+            color: #2d3748;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        .logo-preview {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 15px;
+            border: 2px dashed #cbd5e0;
+        }
+        #downloadBtn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 10px;
+        }
+        #downloadBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .upload-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f0f9ff;
+            border-radius: 15px;
+            border: 2px dashed #3b82f6;
+        }
+        .upload-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        .upload-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        .size-options {
+            margin: 20px 0;
+        }
+        .size-btn {
+            background: #e2e8f0;
+            color: #2d3748;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .size-btn.active {
+            background: #4299e1;
+            color: white;
+        }
+        .info {
+            background: #ebf8ff;
+            border: 1px solid #90cdf4;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            color: #2b6cb0;
+        }
+        .current-file {
+            margin: 10px 0;
+            padding: 10px;
+            background: #ecfdf5;
+            border-radius: 8px;
+            color: #065f46;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Logo Convertisseur PNG</h1>
+        <p><strong>Importez votre SVG et téléchargez en PNG</strong></p>
+        
+        <!-- Section d'upload -->
+        <div class="upload-section">
+            <input type="file" id="svgUpload" accept=".svg,image/svg+xml" style="display: none;">
+            <button class="upload-btn" onclick="document.getElementById('svgUpload').click()">
+                📁 Importer un fichier SVG
+            </button>
+            <p style="margin: 10px 0; color: #64748b; font-size: 14px;">
+                Ou utilisez le logo par défaut ci-dessous
+            </p>
+            <div id="currentFile" class="current-file" style="display: none;"></div>
+        </div>
+        
+        <div class="logo-preview">
+            <svg id="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+                <defs>
+                    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#1E3A8A;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#0F172A;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#E2E8F0;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#FCD34D;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#F59E0B;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                
+                <rect x="20" y="20" width="88" height="88" fill="none" stroke="url(#goldGradient)" stroke-width="1.5" opacity="0.3"/>
+                <circle cx="64" cy="64" r="58" fill="url(#bgGradient)" stroke="url(#goldGradient)" stroke-width="2"/>
+                <circle cx="64" cy="64" r="45" fill="none" stroke="url(#goldGradient)" stroke-width="1" opacity="0.4"/>
+                
+                <line x1="64" y1="10" x2="64" y2="118" stroke="url(#goldGradient)" stroke-width="0.8" opacity="0.2"/>
+                <line x1="10" y1="64" x2="118" y2="64" stroke="url(#goldGradient)" stroke-width="0.8" opacity="0.2"/>
+                
+                <circle cx="64" cy="25" r="2.5" fill="#00D4FF" opacity="0.8"/>
+                <circle cx="64" cy="103" r="2.5" fill="#00D4FF" opacity="0.8"/>
+                <circle cx="25" cy="64" r="2.5" fill="#00D4FF" opacity="0.8"/>
+                <circle cx="103" cy="64" r="2.5" fill="#00D4FF" opacity="0.8"/>
+                
+                <circle cx="40" cy="40" r="2" fill="#00D4FF" opacity="0.6"/>
+                <circle cx="88" cy="40" r="2" fill="#00D4FF" opacity="0.6"/>
+                <circle cx="40" cy="88" r="2" fill="#00D4FF" opacity="0.6"/>
+                <circle cx="88" cy="88" r="2" fill="#00D4FF" opacity="0.6"/>
+                
+                <line x1="64" y1="25" x2="40" y2="40" stroke="#00D4FF" stroke-width="1" opacity="0.3"/>
+                <line x1="64" y1="25" x2="88" y2="40" stroke="#00D4FF" stroke-width="1" opacity="0.3"/>
+                <line x1="64" y1="103" x2="40" y2="88" stroke="#00D4FF" stroke-width="1" opacity="0.3"/>
+                <line x1="64" y1="103" x2="88" y2="88" stroke="#00D4FF" stroke-width="1" opacity="0.3"/>
+                
+                <path d="M 42 48 Q 42 42 48 42 L 54 42 Q 60 42 60 48 Q 60 54 54 54 L 50 54 Q 44 54 44 60 Q 44 66 50 66 L 58 66 Q 64 66 64 72" 
+                      stroke="url(#textGradient)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                
+                <path d="M 70 42 L 70 86 M 70 42 L 78 42 Q 86 42 86 50 L 86 78 Q 86 86 78 86 L 70 86" 
+                      stroke="url(#textGradient)" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                
+                <text x="64" y="18" font-family="serif" font-size="6" fill="url(#goldGradient)" text-anchor="middle" opacity="0.6">AI</text>
+                <text x="64" y="119" font-family="serif" font-size="6" fill="url(#goldGradient)" text-anchor="middle" opacity="0.6">DEV</text>
+                
+                <polygon points="15,15 20,10 25,15 20,20" fill="url(#goldGradient)" opacity="0.4"/>
+                <polygon points="103,15 108,10 113,15 108,20" fill="url(#goldGradient)" opacity="0.4"/>
+            </svg>
+        </div>
+
+        <div class="size-options">
+            <p><strong>Choisissez la taille :</strong></p>
+            <button class="size-btn active" onclick="setSize(128)">128px (VS Code)</button>
+            <button class="size-btn" onclick="setSize(256)">256px (HD)</button>
+            <button class="size-btn" onclick="setSize(512)">512px (Ultra HD)</button>
+        </div>
+
+        <button id="downloadBtn" onclick="downloadPNG()">
+            📥 Télécharger PNG
+        </button>
+
+        <div class="info">
+            <p><strong>💡 Instructions :</strong></p>
+            <p>1. Importez votre fichier SVG (optionnel)</p>
+            <p>2. Choisissez la taille (128px recommandé pour VS Code)</p>
+            <p>3. Cliquez "Télécharger PNG"</p>
+            <p>4. Uploadez le fichier dans votre extension VS Code</p>
+        </div>
+    </div>
+
+    <script>
+        let currentSize = 128;
+        let originalFileName = 'logo-default';
+
+        // Handler pour l'upload de fichier SVG
+        document.getElementById('svgUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                originalFileName = file.name.replace('.svg', '');
+                
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        const logoContainer = document.querySelector('.logo-preview');
+                        logoContainer.innerHTML = event.target.result;
+                        
+                        // Mettre à jour l'ID et les dimensions du nouveau SVG
+                        const newSvg = logoContainer.querySelector('svg');
+                        if (newSvg) {
+                            newSvg.id = 'logo';
+                            newSvg.setAttribute('width', currentSize);
+                            newSvg.setAttribute('height', currentSize);
+                        }
+                        
+                        // Afficher le nom du fichier
+                        const fileDisplay = document.getElementById('currentFile');
+                        fileDisplay.textContent = `📄 Fichier importé: ${file.name}`;
+                        fileDisplay.style.display = 'block';
+                        
+                    } catch (error) {
+                        alert('Erreur lors du chargement du fichier SVG. Vérifiez que c\'est un fichier SVG valide.');
+                        console.error('Erreur SVG:', error);
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        function setSize(size) {
+            currentSize = size;
+            document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const logo = document.getElementById('logo');
+            if (logo) {
+                logo.setAttribute('width', size);
+                logo.setAttribute('height', size);
+            }
+        }
+
+        function downloadPNG() {
+            const svg = document.getElementById('logo');
+            if (!svg) {
+                alert('Aucun logo trouvé. Veuillez importer un fichier SVG.');
+                return;
+            }
+            
+            try {
+                const svgData = new XMLSerializer().serializeToString(svg);
+                
+                const canvas = document.createElement('canvas');
+                canvas.width = currentSize;
+                canvas.height = currentSize;
+                const ctx = canvas.getContext('2d');
+                
+                const img = new Image();
+                img.onload = function() {
+                    try {
+                        ctx.drawImage(img, 0, 0, currentSize, currentSize);
+                        
+                        canvas.toBlob(function(blob) {
+                            if (blob) {
+                                const link = document.createElement('a');
+                                link.download = `${originalFileName}-${currentSize}px.png`;
+                                link.href = URL.createObjectURL(blob);
+                                
+                                // Ajouter le lien au DOM temporairement
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                                
+                                // Nettoyer l'URL
+                                URL.revokeObjectURL(link.href);
+                                
+                                // Feedback visuel
+                                const btn = document.getElementById('downloadBtn');
+                                const originalText = btn.textContent;
+                                btn.textContent = '✅ Téléchargé !';
+                                btn.style.background = '#10b981';
+                                
+                                setTimeout(() => {
+                                    btn.textContent = originalText;
+                                    btn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                                }, 2000);
+                                
+                            } else {
+                                throw new Error('Impossible de créer le blob');
+                            }
+                        }, 'image/png');
+                        
+                    } catch (drawError) {
+                        console.error('Erreur lors du dessin:', drawError);
+                        alert('Erreur lors de la conversion. Vérifiez que le SVG est valide.');
+                    }
+                };
+                
+                img.onerror = function() {
+                    console.error('Erreur lors du chargement de l\'image SVG');
+                    alert('Erreur lors du chargement du SVG. Le fichier pourrait être corrompu.');
+                };
+                
+                // Encoder le SVG de manière plus robuste
+                const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+                const svgUrl = URL.createObjectURL(svgBlob);
+                img.src = svgUrl;
+                
+                // Nettoyer l'URL après chargement
+                img.onload = function() {
+                    URL.revokeObjectURL(svgUrl);
+                    try {
+                        ctx.drawImage(img, 0, 0, currentSize, currentSize);
+                        
+                        canvas.toBlob(function(blob) {
+                            if (blob) {
+                                const link = document.createElement('a');
+                                link.download = `${originalFileName}-${currentSize}px.png`;
+                                link.href = URL.createObjectURL(blob);
+                                
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                                URL.revokeObjectURL(link.href);
+                                
+                                // Feedback visuel
+                                const btn = document.getElementById('downloadBtn');
+                                const originalText = btn.textContent;
+                                btn.textContent = '✅ Téléchargé !';
+                                btn.style.background = '#10b981';
+                                
+                                setTimeout(() => {
+                                    btn.textContent = originalText;
+                                    btn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                                }, 2000);
+                                
+                            } else {
+                                alert('Erreur lors de la création du fichier PNG.');
+                            }
+                        }, 'image/png');
+                        
+                    } catch (drawError) {
+                        console.error('Erreur lors du dessin:', drawError);
+                        alert('Erreur lors de la conversion en PNG.');
+                    }
+                };
+                
+            } catch (error) {
+                console.error('Erreur générale:', error);
+                alert('Erreur lors du traitement du SVG: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

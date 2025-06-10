@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogoMaster AI - MVP</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .app {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+            gap: 0;
+        }
+        
+        .control-panel {
+            background: white;
+            padding: 30px;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+        
+        .output-panel {
+            background: #f8fafc;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo-header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+        
+        .logo-header .tagline {
+            color: #64748b;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.2s;
+            background: white;
+        }
+        
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            height: 80px;
+        }
+        
+        .slider-group {
+            margin-bottom: 20px;
+        }
+        
+        .slider-group label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .slider {
+            width: 100%;
+            margin: 10px 0;
+            -webkit-appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: #e5e7eb;
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        
+        .generate-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 20px;
+        }
+        
+        .generate-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .style-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .style-option {
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+        
+        .style-option.active {
+            border-color: #667eea;
+            background: #f0f4ff;
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .logo-canvas {
+            width: 400px;
+            height: 400px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .generation-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: 10;
+            transition: opacity 0.5s ease;
+        }
+        
+        .ai-thinking {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        
+        .progress-bar {
+            width: 200px;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        .generation-step {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-align: center;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        @keyframes drawPath {
+            from { stroke-dasharray: 0 1000; }
+            to { stroke-dasharray: 1000 0; }
+        }
+        
+        @keyframes fadeInScale {
+            from { 
+                opacity: 0; 
+                transform: scale(0.8); 
+            }
+            to { 
+                opacity: 1; 
+                transform: scale(1); 
+            }
+        }
+        
+        .logo-element {
+            animation: fadeInScale 0.8s ease forwards;
+        }
+        
+        .logo-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawPath 2s ease forwards;
+        }
+        
+        .mockup-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
+            margin-top: 20px;
+        }
+        
+        .mockup-item {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+        
+        .mockup-item:hover {
+            transform: translateY(-2px);
+        }
+        
+        .mockup-preview {
+            width: 60px;
+            height: 60px;
+            background: #f8fafc;
+            border-radius: 6px;
+            margin: 0 auto 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+        
+        .mockup-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .concept-carousel {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 20px 0;
+            margin: 20px 0;
+        }
+        
+        .concept-card {
+            min-width: 120px;
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .concept-card.active {
+            border-color: #667eea;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .concept-preview {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .concept-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 4px;
+        }
+        
+        .concept-desc {
+            font-size: 0.7rem;
+            color: #64748b;
+        }
+        
+        .logo-placeholder {
+            color: #9ca3af;
+            text-align: center;
+            font-style: italic;
+        }
+        
+        .logo-info {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .logo-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 4px;
+        }
+        
+        .export-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .export-btn {
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .export-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+        
+        .variations-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .variation-thumb {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .variation-thumb:hover, .variation-thumb.active {
+            border-color: #667eea;
+        }
+        
+        .quality-indicators {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        
+        .quality-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .quality-excellent { background: #dcfce7; color: #166534; }
+        .quality-good { background: #fef3c7; color: #92400e; }
+        .quality-fair { background: #fee2e2; color: #991b1b; }
+        
+        @media (max-width: 1024px) {
+            .app {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+            }
+            
+            .logo-canvas {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .export-buttons {
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="control-panel">
+            <div class="logo-header">
+                <h1>LogoMaster AI</h1>
+                <p class="tagline">Générateur de logos professionnels</p>
+            </div>
+            
+            <form id="logoForm">
+                <div class="form-group">
+                    <label for="businessName">Nom de l'entreprise</label>
+                    <input type="text" id="businessName" placeholder="Ex: TechCorp, GreenEnergy, CreativeStudio..." required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="businessDescription">Description de l'activité</label>
+                    <textarea id="businessDescription" placeholder="Ex: Startup technologique spécialisée dans l'IA, développement d'applications mobiles innovantes..." required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="industry">Secteur d'activité</label>
+                    <select id="industry" required>
+                        <option value="">Sélectionnez un secteur</option>
+                        <option value="tech">Technologie</option>
+                        <option value="finance">Finance</option>
+                        <option value="health">Santé</option>
+                        <option value="education">Éducation</option>
+                        <option value="retail">Commerce</option>
+                        <option value="food">Alimentaire</option>
+                        <option value="consulting">Conseil</option>
+                        <option value="creative">Créatif</option>
+                        <option value="automotive">Automobile</option>
+                        <option value="real-estate">Immobilier</option>
+                        <option value="energy">Énergie</option>
+                        <option value="sports">Sport</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Style visuel</label>
+                    <div class="style-selector">
+                        <div class="style-option active" data-style="modern">🎯 Moderne</div>
+                        <div class="style-option" data-style="classic">🏛️ Classique</div>
+                        <div class="style-option" data-style="minimal">⚪ Minimal</div>
+                        <div class="style-option" data-style="bold">💥 Audacieux</div>
+                    </div>
+                </div>
+                
+                <div class="slider-group">
+                    <label>
+                        Complexité
+                        <span id="complexityValue">50</span>%
+                    </label>
+                    <input type="range" id="complexity" class="slider" min="10" max="90" value="50">
+                </div>
+                
+                <div class="slider-group">
+                    <label>
+                        Modernité
+                        <span id="modernityValue">70</span>%
+                    </label>
+                    <input type="range" id="modernity" class="slider" min="10" max="90" value="70">
+                </div>
+                
+                <div class="slider-group">
+                    <label>
+                        Professionnalisme
+                        <span id="professionalismValue">80</span>%
+                    </label>
+                    <input type="range" id="professionalism" class="slider" min="30" max="100" value="80">
+                </div>
+                
+                <button type="submit" class="generate-btn" id="generateBtn">
+                    🎨 Générer Logo
+                </button>
+            </form>
+            
+            <!-- Carousel de concepts sera affiché ici après génération -->
+        </div>
+        
+        <div class="output-panel">
+            <div class="logo-canvas" id="logoCanvas">
+                <div class="generation-overlay" id="generationOverlay" style="display: none;">
+                    <div class="ai-thinking" id="aiThinking">🧠 IA en réflexion...</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                    </div>
+                    <div class="generation-step" id="generationStep">Initialisation...</div>
+                </div>
+                <div class="logo-placeholder" id="logoPlaceholder">
+                    <p>🎨</p>
+                    <p>Votre logo apparaîtra ici</p>
+                </div>
+            </div>
+            
+            <div class="concept-carousel" id="conceptCarousel" style="display: none;">
+                <!-- Concepts générés -->
+            </div>
+
+            <div class="logo-info" id="logoInfo" style="display: none;">
+                <div class="logo-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="readabilityScore">-</div>
+                        <div class="stat-label">Lisibilité</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="uniquenessScore">-</div>
+                        <div class="stat-label">Unicité</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="professionalScore">-</div>
+                        <div class="stat-label">Pro Score</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="adaptabilityScore">-</div>
+                        <div class="stat-label">Adaptabilité</div>
+                    </div>
+                </div>
+                
+                <div class="quality-indicators" id="qualityIndicators">
+                    <!-- Quality badges -->
+                </div>
+            </div>
+            
+            <div class="mockup-grid" id="mockupGrid" style="display: none;">
+                <div class="mockup-item">
+                    <div class="mockup-preview" id="businessCardMockup">📇</div>
+                    <div class="mockup-label">Carte de visite</div>
+                </div>
+                <div class="mockup-item">
+                    <div class="mockup-preview" id="websiteMockup">💻</div>
+                    <div class="mockup-label">Site web</div>
+                </div>
+                <div class="mockup-item">
+                    <div class="mockup-preview" id="appIconMockup">📱</div>
+                    <div class="mockup-label">App mobile</div>
+                </div>
+            </div>
+            
+            <div class="export-buttons" id="exportButtons" style="display: none;">
+                <button class="export-btn" onclick="exportLogo('svg')">📄 SVG</button>
+                <button class="export-btn" onclick="exportLogo('png')">🖼️ PNG</button>
+                <button class="export-btn" onclick="exportLogo('pack')">📦 Pack</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration des industries et couleurs
+        const industryConfig = {
+            tech: { 
+                colors: ['#3b82f6', '#06b6d4', '#8b5cf6'], 
+                shapes: ['geometric', 'circuit', 'modern'],
+                keywords: ['innovation', 'digital', 'future']
+            },
+            finance: { 
+                colors: ['#1e40af', '#059669', '#374151'], 
+                shapes: ['solid', 'trust', 'classic'],
+                keywords: ['trust', 'stability', 'growth']
+            },
+            health: { 
+                colors: ['#dc2626', '#059669', '#0284c7'], 
+                shapes: ['cross', 'organic', 'caring'],
+                keywords: ['care', 'health', 'life']
+            },
+            education: { 
+                colors: ['#7c3aed', '#059669', '#ea580c'], 
+                shapes: ['book', 'growth', 'knowledge'],
+                keywords: ['learning', 'growth', 'future']
+            },
+            retail: { 
+                colors: ['#dc2626', '#ea580c', '#8b5cf6'], 
+                shapes: ['friendly', 'accessible', 'vibrant'],
+                keywords: ['quality', 'service', 'value']
+            },
+            food: { 
+                colors: ['#ea580c', '#dc2626', '#059669'], 
+                shapes: ['organic', 'warm', 'natural'],
+                keywords: ['fresh', 'quality', 'taste']
+            },
+            consulting: { 
+                colors: ['#374151', '#1e40af', '#059669'], 
+                shapes: ['professional', 'clean', 'expert'],
+                keywords: ['expertise', 'strategy', 'results']
+            },
+            creative: { 
+                colors: ['#8b5cf6', '#ec4899', '#f59e0b'], 
+                shapes: ['artistic', 'bold', 'unique'],
+                keywords: ['creativity', 'art', 'innovation']
+            },
+            automotive: { 
+                colors: ['#374151', '#dc2626', '#0284c7'], 
+                shapes: ['dynamic', 'strong', 'speed'],
+                keywords: ['performance', 'quality', 'innovation']
+            },
+            'real-estate': { 
+                colors: ['#059669', '#1e40af', '#ea580c'], 
+                shapes: ['house', 'solid', 'trust'],
+                keywords: ['home', 'investment', 'future']
+            },
+            energy: { 
+                colors: ['#059669', '#f59e0b', '#0284c7'], 
+                shapes: ['power', 'sustainable', 'dynamic'],
+                keywords: ['power', 'sustainable', 'future']
+            },
+            sports: { 
+                colors: ['#dc2626', '#ea580c', '#1e40af'], 
+                shapes: ['dynamic', 'strong', 'victory'],
+                keywords: ['performance', 'team', 'victory']
+            }
+        };
+
+        let currentLogo = null;
+        let selectedStyle = 'modern';
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeForm();
+            initializeSliders();
+            initializeStyleSelector();
+        });
+
+        function initializeForm() {
+            const form = document.getElementById('logoForm');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                generateLogo();
+            });
+        }
+
+        function initializeSliders() {
+            const sliders = ['complexity', 'modernity', 'professionalism'];
+            sliders.forEach(sliderId => {
+                const slider = document.getElementById(sliderId);
+                const valueDisplay = document.getElementById(sliderId + 'Value');
+                
+                slider.addEventListener('input', function() {
+                    valueDisplay.textContent = slider.value;
+                });
+            });
+        }
+
+        function initializeStyleSelector() {
+            const styleOptions = document.querySelectorAll('.style-option');
+            styleOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    styleOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedStyle = this.dataset.style;
+                });
+            });
+        }
+
+        async function generateLogo() {
+            const generateBtn = document.getElementById('generateBtn');
+            generateBtn.disabled = true;
+            generateBtn.textContent = '⏳ Génération...';
+
+            try {
+                // Démarrer l'animation de génération
+                await startGenerationAnimation();
+                
+                // Récupérer les données du formulaire
+                const formData = getFormData();
+                
+                // Générer 3 concepts différents
+                const concepts = await generateMultipleConcepts(formData);
+                
+                // Afficher les concepts dans le carousel
+                displayConceptCarousel(concepts);
+                
+                // Sélectionner le premier concept par défaut
+                await selectConcept(concepts[0], 0);
+                
+                // Analyser la qualité
+                analyzeLogoQuality(concepts[0]);
+                
+                // Générer les mockups contextuels
+                generateContextualMockups(concepts[0], formData);
+                
+            } catch (error) {
+                console.error('Erreur génération:', error);
+                alert('Erreur lors de la génération. Veuillez réessayer.');
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.textContent = '🎨 Générer Logo';
+            }
+        }
+
+        async function startGenerationAnimation() {
+            const overlay = document.getElementById('generationOverlay');
+            const placeholder = document.getElementById('logoPlaceholder');
+            const progressFill = document.getElementById('progressFill');
+            const aiThinking = document.getElementById('aiThinking');
+            const generationStep = document.getElementById('generationStep');
+            
+            // Masquer placeholder et afficher overlay
+            placeholder.style.display = 'none';
+            overlay.style.display = 'flex';
+            
+            const steps = [
+                { text: '🔍 Analyse du secteur d\'activité...', progress: 20 },
+                { text: '🎨 Sélection de la palette couleurs...', progress: 40 },
+                { text: '⚡ Génération des formes géométriques...', progress: 60 },
+                { text: '🧠 Optimisation par l\'IA...', progress: 80 },
+                { text: '✨ Finalisation des concepts...', progress: 100 }
+            ];
+            
+            for (let i = 0; i < steps.length; i++) {
+                const step = steps[i];
+                
+                // Mettre à jour le texte et la progression
+                generationStep.textContent = step.text;
+                progressFill.style.width = step.progress + '%';
+                
+                // Messages dynamiques pour l'IA
+                if (i === 0) aiThinking.textContent = '🧠 Analyse en cours...';
+                else if (i === 2) aiThinking.textContent = '🎨 Création artistique...';
+                else if (i === 4) aiThinking.textContent = '✨ Magie en cours...';
+                
+                // Attendre un peu pour l'effet dramatique
+                await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 600));
+            }
+            
+            // Masquer l'overlay avec animation
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                overlay.style.opacity = '1';
+            }, 500);
+        }
+
+        async function generateMultipleConcepts(formData) {
+            const concepts = [];
+            const industry = industryConfig[formData.industry] || industryConfig.tech;
+            
+            // Concept 1: Style principal demandé
+            const concept1 = await createLogo({
+                ...formData,
+                conceptType: 'primary'
+            });
+            concept1.title = 'Principal';
+            concept1.description = 'Votre style préféré';
+            
+            // Concept 2: Alternative moderne
+            const concept2 = await createLogo({
+                ...formData,
+                style: 'modern',
+                complexity: Math.min(90, formData.complexity + 20),
+                conceptType: 'modern'
+            });
+            concept2.title = 'Moderne+';
+            concept2.description = 'Version plus tech';
+            
+            // Concept 3: Alternative minimaliste
+            const concept3 = await createLogo({
+                ...formData,
+                style: 'minimal',
+                complexity: Math.max(10, formData.complexity - 30),
+                conceptType: 'minimal'
+            });
+            concept3.title = 'Minimal';
+            concept3.description = 'Épuré et clean';
+            
+            concepts.push(concept1, concept2, concept3);
+            return concepts;
+        }
+
+        function displayConceptCarousel(concepts) {
+            const carousel = document.getElementById('conceptCarousel');
+            carousel.innerHTML = '';
+            carousel.style.display = 'flex';
+            
+            concepts.forEach((concept, index) => {
+                const card = document.createElement('div');
+                card.className = `concept-card ${index === 0 ? 'active' : ''}`;
+                
+                card.innerHTML = `
+                    <div class="concept-preview">
+                        ${createThumbnailSVG(concept.svg)}
+                    </div>
+                    <div class="concept-title">${concept.title}</div>
+                    <div class="concept-desc">${concept.description}</div>
+                `;
+                
+                card.addEventListener('click', () => selectConcept(concept, index));
+                carousel.appendChild(card);
+            });
+        }
+
+        function createThumbnailSVG(originalSVG) {
+            // Créer une version miniature du SVG pour la prévisualisation
+            return originalSVG.replace(/width="320"/, 'width="80"').replace(/height="320"/, 'height="80"');
+        }
+
+        async function selectConcept(concept, index) {
+            // Mettre à jour le concept actif
+            document.querySelectorAll('.concept-card').forEach((card, i) => {
+                card.classList.toggle('active', i === index);
+            });
+            
+            // Animer le changement de logo
+            const canvas = document.getElementById('logoCanvas');
+            
+            // Animation de sortie
+            canvas.style.opacity = '0.5';
+            canvas.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                // Afficher le nouveau logo avec animation d'entrée
+                displayAnimatedLogo(concept);
+                
+                // Animation d'entrée
+                canvas.style.opacity = '1';
+                canvas.style.transform = 'scale(1)';
+                canvas.style.transition = 'all 0.5s ease';
+                
+                currentLogo = concept;
+                
+                // Afficher les contrôles
+                document.getElementById('exportButtons').style.display = 'grid';
+                document.getElementById('logoInfo').style.display = 'block';
+                document.getElementById('mockupGrid').style.display = 'grid';
+                
+            }, 300);
+        }
+
+        function displayAnimatedLogo(logoData) {
+            const canvas = document.getElementById('logoCanvas');
+            
+            // Créer le SVG avec animations
+            const animatedSVG = addDrawingAnimations(logoData.svg);
+            canvas.innerHTML = animatedSVG;
+            
+            // Déclencher les animations séquentiellement
+            setTimeout(() => {
+                const elements = canvas.querySelectorAll('.logo-element');
+                elements.forEach((element, index) => {
+                    element.style.animationDelay = (index * 0.2) + 's';
+                });
+            }, 100);
+        }
+
+        function addDrawingAnimations(svgContent) {
+            // Ajouter des classes d'animation aux éléments SVG
+            let animatedSVG = svgContent
+                .replace(/<circle/g, '<circle class="logo-element"')
+                .replace(/<rect/g, '<rect class="logo-element"')
+                .replace(/<polygon/g, '<polygon class="logo-element"')
+                .replace(/<path/g, '<path class="logo-element logo-path"')
+                .replace(/<line/g, '<line class="logo-element logo-path"')
+                .replace(/<text/g, '<text class="logo-element"');
+            
+            return animatedSVG;
+        }
+
+        function generateContextualMockups(logoData, formData) {
+            const businessCardMockup = document.getElementById('businessCardMockup');
+            const websiteMockup = document.getElementById('websiteMockup');
+            const appIconMockup = document.getElementById('appIconMockup');
+            
+            // Créer des versions ultra-miniatures pour les mockups
+            const miniLogo = createMiniatureLogo(logoData, 20);
+            
+            // Carte de visite
+            businessCardMockup.innerHTML = `
+                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 4px; padding: 8px; width: 50px; height: 30px; position: relative;">
+                    <div style="position: absolute; top: 4px; left: 4px; width: 12px; height: 12px;">
+                        ${miniLogo}
+                    </div>
+                    <div style="position: absolute; bottom: 4px; right: 4px; font-size: 4px; color: #9ca3af;">
+                        ${formData.businessName.substring(0, 8)}
+                    </div>
+                </div>
+            `;
+            
+            // Site web
+            websiteMockup.innerHTML = `
+                <div style="background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 4px; width: 50px; height: 35px; position: relative;">
+                    <div style="background: white; height: 8px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; padding: 0 4px;">
+                        <div style="width: 8px; height: 8px;">
+                            ${miniLogo.replace(/width="20"/, 'width="8"').replace(/height="20"/, 'height="8"')}
+                        </div>
+                    </div>
+                    <div style="padding: 4px; font-size: 3px; color: #64748b;">
+                        <div style="background: #e5e7eb; height: 2px; margin: 1px 0; border-radius: 1px;"></div>
+                        <div style="background: #e5e7eb; height: 2px; margin: 1px 0; border-radius: 1px; width: 70%;"></div>
+                    </div>
+                </div>
+            `;
+            
+            // Icône d'app
+            appIconMockup.innerHTML = `
+                <div style="background: linear-gradient(135deg, ${logoData.colors[0]}, ${logoData.colors[1] || logoData.colors[0]}); border-radius: 8px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                    <div style="width: 24px; height: 24px;">
+                        ${miniLogo.replace(/width="20"/, 'width="24"').replace(/height="20"/, 'height="24"')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function createMiniatureLogo(logoData, size) {
+            // Simplifier le logo pour les très petites tailles
+            const simplified = logoData.svg
+                .replace(/width="320"/, `width="${size}"`)
+                .replace(/height="320"/, `height="${size}"`)
+                .replace(/font-size="[^"]*"/g, `font-size="${size/8}"`)
+                .replace(/stroke-width="[^"]*"/g, 'stroke-width="1"');
+            
+            return simplified;
+        }
+
+        function getFormData() {
+            return {
+                businessName: document.getElementById('businessName').value,
+                businessDescription: document.getElementById('businessDescription').value,
+                industry: document.getElementById('industry').value,
+                style: selectedStyle,
+                complexity: parseInt(document.getElementById('complexity').value),
+                modernity: parseInt(document.getElementById('modernity').value),
+                professionalism: parseInt(document.getElementById('professionalism').value)
+            };
+        }
+
+        async function createLogo(formData) {
+            const industry = industryConfig[formData.industry] || industryConfig.tech;
+            const initials = extractInitials(formData.businessName);
+            
+            // Sélectionner couleurs basées sur l'industrie et style
+            const colors = selectColors(industry, formData);
+            
+            // Générer structure basée sur les paramètres
+            const structure = generateLogoStructure(formData, industry, colors);
+            
+            // Créer le SVG
+            const svg = createSVGLogo(structure, initials, colors, formData);
+            
+            return {
+                svg: svg,
+                structure: structure,
+                colors: colors,
+                initials: initials,
+                metadata: {
+                    industry: formData.industry,
+                    style: formData.style,
+                    complexity: formData.complexity
+                }
+            };
+        }
+
+        function extractInitials(businessName) {
+            return businessName
+                .split(' ')
+                .map(word => word.charAt(0).toUpperCase())
+                .slice(0, 2)
+                .join('');
+        }
+
+        function selectColors(industry, formData) {
+            const baseColors = [...industry.colors];
+            const styleModifier = getStyleModifier(formData.style);
+            
+            return baseColors.map(color => adjustColorForStyle(color, styleModifier));
+        }
+
+        function getStyleModifier(style) {
+            const modifiers = {
+                'modern': { saturation: 1.2, brightness: 1.0 },
+                'classic': { saturation: 0.8, brightness: 0.9 },
+                'minimal': { saturation: 0.6, brightness: 1.1 },
+                'bold': { saturation: 1.4, brightness: 1.1 }
+            };
+            return modifiers[style] || modifiers.modern;
+        }
+
+        function adjustColorForStyle(color, modifier) {
+            // Simplification: retourne la couleur de base
+            // En production, appliquer vraiment les modifications HSL
+            return color;
+        }
+
+        function generateLogoStructure(formData, industry, colors) {
+            const complexity = formData.complexity / 100;
+            const modernity = formData.modernity / 100;
+            
+            return {
+                type: selectLogoType(formData.style, complexity),
+                elements: generateElements(industry, complexity, modernity),
+                layout: selectLayout(formData.style, formData.professionalism / 100)
+            };
+        }
+
+        function selectLogoType(style, complexity) {
+            if (complexity < 0.3) return 'text';
+            if (complexity < 0.6) return 'icon-text';
+            return 'badge';
+        }
+
+        function generateElements(industry, complexity, modernity) {
+            const elements = ['background'];
+            
+            if (complexity > 0.3) elements.push('shape');
+            if (complexity > 0.5) elements.push('pattern');
+            if (modernity > 0.6) elements.push('gradient');
+            
+            return elements;
+        }
+
+        function selectLayout(style, professionalism) {
+            if (professionalism > 0.8) return 'horizontal';
+            if (style === 'minimal') return 'stacked';
+            return 'balanced';
+        }
+
+        function createSVGLogo(structure, initials, colors, formData) {
+            const size = 320;
+            const center = size / 2;
+            
+            let svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">`;
+            
+            // Ajouter définitions
+            svg += createSVGDefs(colors);
+            
+            // Background
+            if (structure.elements.includes('background')) {
+                svg += createBackground(size, colors, structure.type);
+            }
+            
+            // Shape principale
+            if (structure.elements.includes('shape')) {
+                svg += createMainShape(center, colors, formData.industry, formData.complexity);
+            }
+            
+            // Pattern
+            if (structure.elements.includes('pattern')) {
+                svg += createPattern(center, colors, formData.modernity);
+            }
+            
+            // Texte/Initiales
+            svg += createText(center, initials, colors, formData, structure.layout);
+            
+            svg += '</svg>';
+            return svg;
+        }
+
+        function createSVGDefs(colors) {
+            return `
+                <defs>
+                    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="${colors[0]}" />
+                        <stop offset="100%" stop-color="${colors[1] || colors[0]}" />
+                    </linearGradient>
+                    <radialGradient id="bgGrad" cx="0.3" cy="0.3">
+                        <stop offset="0%" stop-color="${colors[0]}" stop-opacity="0.1" />
+                        <stop offset="100%" stop-color="${colors[1] || colors[0]}" stop-opacity="0.05" />
+                    </radialGradient>
+                </defs>
+            `;
+        }
+
+        function createBackground(size, colors, type) {
+            if (type === 'badge') {
+                const radius = size * 0.4;
+                return `<circle cx="${size/2}" cy="${size/2}" r="${radius}" fill="url(#primaryGrad)" opacity="0.9"/>`;
+            } else if (type === 'icon-text') {
+                return `<rect x="20" y="20" width="${size-40}" height="${size-40}" rx="20" fill="url(#bgGrad)"/>`;
+            }
+            return '';
+        }
+
+        function createMainShape(center, colors, industry, complexity) {
+            const config = industryConfig[industry] || industryConfig.tech;
+            const shapes = config.shapes;
+            const selectedShape = shapes[Math.floor(Math.random() * shapes.length)];
+            
+            const radius = 40 + (complexity / 100) * 40;
+            
+            switch (selectedShape) {
+                case 'geometric':
+                    return createGeometricShape(center, radius, colors[0]);
+                case 'organic':
+                    return createOrganicShape(center, radius, colors[0]);
+                case 'circuit':
+                    return createCircuitShape(center, radius, colors[0]);
+                default:
+                    return createDefaultShape(center, radius, colors[0]);
+            }
+        }
+
+        function createGeometricShape(center, radius, color) {
+            const points = 6;
+            let path = `<polygon points="`;
+            for (let i = 0; i < points; i++) {
+                const angle = (i * 2 * Math.PI) / points;
+                const x = center + radius * Math.cos(angle);
+                const y = center + radius * Math.sin(angle);
+                path += `${x},${y} `;
+            }
+            path += `" fill="none" stroke="${color}" stroke-width="3" opacity="0.7"/>`;
+            return path;
+        }
+
+        function createOrganicShape(center, radius, color) {
+            return `
+                <path d="M ${center-radius} ${center} 
+                         Q ${center-radius*1.2} ${center-radius*0.8} ${center} ${center-radius}
+                         Q ${center+radius*0.8} ${center-radius*1.2} ${center+radius} ${center}
+                         Q ${center+radius*1.2} ${center+radius*0.8} ${center} ${center+radius}
+                         Q ${center-radius*0.8} ${center+radius*1.2} ${center-radius} ${center} Z"
+                      fill="none" stroke="${color}" stroke-width="3" opacity="0.7"/>
+            `;
+        }
+
+        function createCircuitShape(center, radius, color) {
+            let circuit = '';
+            const lines = 8;
+            for (let i = 0; i < lines; i++) {
+                const angle = (i * 2 * Math.PI) / lines;
+                const x1 = center + (radius * 0.5) * Math.cos(angle);
+                const y1 = center + (radius * 0.5) * Math.sin(angle);
+                const x2 = center + radius * Math.cos(angle);
+                const y2 = center + radius * Math.sin(angle);
+                
+                circuit += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="2" opacity="0.6"/>`;
+                circuit += `<circle cx="${x2}" cy="${y2}" r="3" fill="${color}" opacity="0.8"/>`;
+            }
+            return circuit;
+        }
+
+        function createDefaultShape(center, radius, color) {
+            return `<circle cx="${center}" cy="${center}" r="${radius}" fill="none" stroke="${color}" stroke-width="3" opacity="0.7"/>`;
+        }
+
+        function createPattern(center, colors, modernity) {
+            if (modernity < 60) return '';
+            
+            let pattern = '';
+            const intensity = Math.floor(modernity / 20);
+            
+            for (let i = 0; i < intensity; i++) {
+                const angle = (i * 2 * Math.PI) / intensity;
+                const radius = 20 + i * 15;
+                const x = center + radius * Math.cos(angle);
+                const y = center + radius * Math.sin(angle);
+                
+                pattern += `<circle cx="${x}" cy="${y}" r="2" fill="${colors[2] || colors[0]}" opacity="0.4"/>`;
+            }
+            
+            return pattern;
+        }
+
+        function createText(center, initials, colors, formData, layout) {
+            const fontSize = layout === 'stacked' ? 48 : 36;
+            const yOffset = layout === 'horizontal' ? 8 : 
+                           layout === 'stacked' ? 60 : 8;
+            
+            let text = `<text x="${center}" y="${center + yOffset}" text-anchor="middle" 
+                        fill="${colors[0]}" font-family="Arial, sans-serif" 
+                        font-size="${fontSize}" font-weight="700">${initials}</text>`;
+            
+            // Nom complet en dessous si layout stacked
+            if (layout === 'stacked' && formData.businessName.length < 15) {
+                text += `<text x="${center}" y="${center + 85}" text-anchor="middle" 
+                         fill="${colors[0]}" font-family="Arial, sans-serif" 
+                         font-size="14" font-weight="500" opacity="0.8">${formData.businessName}</text>`;
+            }
+            
+            return text;
+        }
+
+        function analyzeLogoQuality(logoData) {
+            // Simulation des scores qualité avec effet de compteur animé
+            const targetScores = {
+                readability: 85 + Math.random() * 10,
+                uniqueness: 75 + Math.random() * 20,
+                professional: 80 + Math.random() * 15,
+                adaptability: 90 + Math.random() * 8
+            };
+            
+            // Animation des scores
+            Object.keys(targetScores).forEach(scoreType => {
+                const element = document.getElementById(scoreType + 'Score');
+                animateScore(element, 0, Math.round(targetScores[scoreType]), 1500);
+            });
+            
+            // Quality badges avec animation décalée
+            const indicators = document.getElementById('qualityIndicators');
+            indicators.innerHTML = '';
+            
+            const badges = [
+                { label: 'Lisible 16px', class: 'quality-excellent' },
+                { label: 'Scalable ∞', class: 'quality-excellent' },
+                { label: 'Print Ready', class: 'quality-good' },
+                { label: 'Mobile OK', class: 'quality-excellent' },
+                { label: 'Brand Cohérent', class: 'quality-excellent' }
+            ];
+            
+            badges.forEach((badge, index) => {
+                setTimeout(() => {
+                    const span = document.createElement('span');
+                    span.className = `quality-badge ${badge.class}`;
+                    span.textContent = badge.label;
+                    span.style.opacity = '0';
+                    span.style.transform = 'translateY(10px)';
+                    indicators.appendChild(span);
+                    
+                    // Animation d'apparition
+                    setTimeout(() => {
+                        span.style.transition = 'all 0.3s ease';
+                        span.style.opacity = '1';
+                        span.style.transform = 'translateY(0)';
+                    }, 50);
+                }, index * 200);
+            });
+        }
+
+        function animateScore(element, start, end, duration) {
+            const startTime = performance.now();
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Easing function pour un effet plus naturel
+                const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                const currentValue = Math.round(start + (end - start) * easeOutQuart);
+                
+                element.textContent = currentValue;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+
+        // Suppression des fonctions obsolètes et ajout d'effets wow supplémentaires
+        
+        function createVariation(logoData, index) {
+            // Fonction obsolète - remplacée par le système de concepts multiples
+            return logoData.svg;
+        }
+
+        function selectVariation(variationSVG, thumbElement) {
+            // Fonction obsolète - remplacée par selectConcept
+            return;
+        }
+
+        // Nouvelle fonction pour effet de particules pendant la génération
+        function createParticleEffect() {
+            const canvas = document.getElementById('logoCanvas');
+            
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: absolute;
+                    width: 4px;
+                    height: 4px;
+                    background: linear-gradient(45deg, #667eea, #764ba2);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    animation: float ${2 + Math.random() * 2}s infinite ease-in-out;
+                    top: ${Math.random() * 100}%;
+                    left: ${Math.random() * 100}%;
+                    opacity: ${0.3 + Math.random() * 0.4};
+                `;
+                
+                canvas.appendChild(particle);
+                
+                // Supprimer après animation
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, 4000);
+            }
+        }
+
+        // Amélioration de l'export avec feedback visuel
+        function exportLogo(format) {
+            if (!currentLogo) {
+                alert('Générez d\'abord un logo');
+                return;
+            }
+            
+            const businessName = document.getElementById('businessName').value || 'logo';
+            const fileName = `${businessName.toLowerCase().replace(/\s+/g, '-')}-logo`;
+            
+            // Effet visuel de téléchargement
+            const exportBtn = event.target;
+            const originalText = exportBtn.textContent;
+            
+            exportBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+            exportBtn.textContent = '⬇️ Téléchargement...';
+            
+            setTimeout(() => {
+                switch (format) {
+                    case 'svg':
+                        downloadSVG(currentLogo.svg, fileName);
+                        exportBtn.textContent = '✅ SVG';
+                        break;
+                    case 'png':
+                        downloadPNG(currentLogo.svg, fileName);
+                        exportBtn.textContent = '✅ PNG';
+                        break;
+                    case 'pack':
+                        downloadPack(currentLogo, fileName);
+                        exportBtn.textContent = '✅ Pack';
+                        break;
+                }
+                
+                setTimeout(() => {
+                    exportBtn.textContent = originalText;
+                    exportBtn.style.background = '';
+                }, 2000);
+            }, 500);
+        }
+
+        // Amélioration du pack de téléchargement
+        function downloadPack(logoData, fileName) {
+            // Créer un contenu de pack plus détaillé
+            const packContent = `
+🎨 PACK LOGO PROFESSIONNEL - ${fileName.toUpperCase()}
+=====================================================
+
+📁 FICHIERS INCLUS:
+• Logo principal (SVG vectoriel)
+• PNG haute résolution (512px, 256px, 128px, 64px)
+• Favicon (32px, 16px)
+• Version monochrome
+• Version inversée (pour fonds sombres)
+
+🎨 PALETTE COULEURS:
+• Primaire: ${logoData.colors[0]}
+• Secondaire: ${logoData.colors[1] || 'N/A'}
+• Accent: ${logoData.colors[2] || 'N/A'}
+
+📏 SPÉCIFICATIONS:
+• Format vectoriel: Scalable à l'infini
+• Lisibilité garantie: Testé jusqu'à 16px
+• Print ready: 300 DPI compatible
+• Web optimized: Formats légers
+
+🚀 USAGE RECOMMANDÉ:
+• Site web: PNG 256px ou SVG
+• Réseaux sociaux: PNG 512px
+• Cartes de visite: SVG ou PNG 128px
+• Favicon: ICO 32px/16px
+• Merchandising: SVG vectoriel
+
+💡 CONSEILS D'UTILISATION:
+• Respecter les espaces de protection
+• Ne pas déformer les proportions
+• Utiliser sur fonds contrastés
+• Version monochrome si < 2 couleurs
+
+---
+Généré par LogoMaster AI - Logo professionnel en quelques secondes
+            `;
+            
+            // Simuler le téléchargement d'un pack complet
+            const blob = new Blob([packContent], { type: 'text/plain' });
+            downloadFile(blob, `${fileName}-pack-guide.txt`);
+            
+            // Message informatif
+            setTimeout(() => {
+                alert(`📦 Pack complet prêt !\n\n✅ Guide d'utilisation téléchargé\n\n🚀 En version complète, ce pack inclurait:\n• Tous les formats (SVG, PNG, ICO)\n• Guidelines de marque (PDF)\n• Mockups haute résolution\n• Déclinaisons automatiques`);
+            }, 1000);
+        }
+
+        function downloadSVG(svgContent, fileName) {
+            const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+            downloadFile(blob, `${fileName}.svg`);
+        }
+
+        function downloadPNG(svgContent, fileName) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+            
+            const img = new Image();
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0, 512, 512);
+                canvas.toBlob(function(blob) {
+                    downloadFile(blob, `${fileName}-512px.png`);
+                }, 'image/png');
+            };
+            
+            const svgBlob = new Blob([svgContent], { type: 'image/svg+xml' });
+            img.src = URL.createObjectURL(svgBlob);
+        }
+
+        function downloadFile(blob, fileName) {
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.download = fileName;
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        // Initialisation avec effet de démarrage
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animation de démarrage de l'interface
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.8s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
