@@ -1,1 +1,15 @@
-import './globals.css';\nimport type { ReactNode } from 'react';\nimport Head from 'next/head';\n\nexport default function RootLayout({ children }: { children: ReactNode }): JSX.Element {\n  return (\n    <html lang='fr'>\n      <head>\n        <meta charSet='UTF-8' />\n        <meta name='viewport' content='width=device-width, initial-scale=1.0' />\n        <title>Logomaster AI</title>\n      </head>\n      <body>{children}</body>\n    </html>\n  );\n}
+// app/layout.tsx
+import './globals.css';
+import type { ReactNode } from 'react';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+
+export default function RootLayout({ children }: { children: ReactNode }): JSX.Element {
+  return (
+    <html lang="fr">
+      <body>
+        <LanguageSwitcher />
+        {children}
+      </body>
+    </html>
+  );
+}
