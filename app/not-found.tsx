@@ -1,4 +1,4 @@
-export default function NotFound(): JSX.Element {
+export default function NotFound() {
   return (
     <div style={{ textAlign: 'center', padding: '4rem' }}>
       <div style={{ fontSize: '5rem' }}>🤖</div>

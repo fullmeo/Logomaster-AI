@@ -1,4 +1,4 @@
-export default function Page(): JSX.Element {
+export default function Page() {
   return (
     <main style={{
       display: 'flex',
@@ -18,14 +18,14 @@ export default function Page(): JSX.Element {
           color: '#111827',
           marginBottom: '1rem'
         }}>
-          Create unique logos with artificial intelligence
+          Créez des logos uniques grâce à l'intelligence artificielle
         </h1>
         <p style={{
           fontSize: '1.25rem',
           color: '#6b7280',
           marginBottom: '2rem'
         }}>
-          A simple, fast, and powerful solution to design professional-grade logos without a designer.
+          Une solution simple, rapide et puissante pour concevoir des logos professionnels sans designer.
         </p>
         <a href="#create" style={{
           padding: '0.75rem 1.5rem',
@@ -35,14 +35,14 @@ export default function Page(): JSX.Element {
           textDecoration: 'none',
           fontWeight: 500
         }}>
-          Get started now
+          Commencer maintenant
         </a>
       </section>
 
       <section>
         <img
           src="/og-image.png"
-          alt="Logomaster AI illustration"
+          alt="Illustration Logomaster AI"
           style={{
             width: '100%',
             maxWidth: '500px',
