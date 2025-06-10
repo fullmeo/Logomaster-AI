@@ -562,7 +562,7 @@ async function simulateHermeticGeneration(
 'use client'
 import { useState } from 'react'
 import { useHermeticGeneration } from '@/hooks/useHermeticGeneration'
-import type { FormData } from '@/lib/types'
+import type { BusinessBusinessFormData } from '@/lib/types'
 
 export default function HermeticLogoPage() {
   const [formData, setFormData] = useState<BusinessFormData>({
@@ -577,7 +577,7 @@ export default function HermeticLogoPage() {
   
   const { hermeticAnalysis, logoData, generationState, generateHermeticLogo } = useHermeticGeneration()
 
-  const handleFormSubmit = async (data: FormData) => {
+  const handleFormSubmit = async (data: BusinessBusinessFormData) => {
     setFormData(data)
     await generateHermeticLogo(data)
   }
