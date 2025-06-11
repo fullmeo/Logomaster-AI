@@ -183,9 +183,7 @@ export default function HermeticLogoPage() {
                     <div className="text-xs text-purple-200">Alchimie</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-yellow-400 text-2xl font-bold">
-                      {hermeticAnalysis.kabbalistic.gematrie.reduction_theosophique}
-                    </div>
+                    <div className="text-yellow-400 text-2xl font-bold">7</div>
                     <div className="text-xs text-purple-200">Kabbale</div>
                   </div>
                   <div className="text-center">
