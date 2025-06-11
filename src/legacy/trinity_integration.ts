@@ -11,7 +11,7 @@ import AlchemicalEngine from '../legacy/alchemical_algorithm.js'
 import PinelKabbalisticEngine from '../legacy/kabbalistic_algorithm.js'
 import UniversalMorphicEngine from '../legacy/morphic_resonance_algorithm.js'
 
-import type { BusinessFormData, LogoData } from '../types'
+import type { BusinessFormData, LogoData, GenerationState } from '../types'
 
 export interface HermeticAnalysis {
   alchemical: {
@@ -487,10 +487,8 @@ export class HermeticTrinitEngine {
 // =============================================================================
 'use client'
 import { useState } from 'react'
-import { HermeticTrinitEngine as ImportedEngine, type HermeticAnalysis } from '@/lib/wrappers/HermeticTrinity'
-
 export function useHermeticGeneration() {
-  const [hermeticEngine] = useState(() => new ImportedEngine())
+  const [hermeticEngine] = useState(() => new HermeticTrinitEngine())
   const [hermeticAnalysis, setHermeticAnalysis] = useState<HermeticAnalysis | null>(null)
   const [logoData, setLogoData] = useState<LogoData | null>(null)
   const [generationState, setGenerationState] = useState<GenerationState>({
@@ -555,12 +553,7 @@ async function simulateHermeticGeneration(
   }
 }
 
-// =============================================================================
 // 📄 PAGE HERMÉTIQUE - app/hermetic/page.tsx
-// =============================================================================
-'use client'
-import { useState } from 'react'
-import { useHermeticGeneration } from '@/hooks/useHermeticGeneration'
 
 export default function HermeticLogoPage() {
   const [formData, setFormData] = useState<BusinessFormData>({
