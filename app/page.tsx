@@ -27,7 +27,7 @@ export default function Page() {
         }}>
           Une solution simple, rapide et puissante pour concevoir des logos professionnels sans designer.
         </p>
-        <a href="#create" style={{
+        <a href="/hermetic" style={{
           padding: '0.75rem 1.5rem',
           background: '#2563eb',
           color: 'white',
