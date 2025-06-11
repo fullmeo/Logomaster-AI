@@ -486,7 +486,7 @@ export class HermeticTrinitEngine {
 // 🎣 HOOK HERMÉTIQUE - hooks/useHermeticGeneration.ts
 // =============================================================================
 'use client'
-import { useState } from 'react'
+import React, { useState } from 'react'
 export function useHermeticGeneration() {
   const [hermeticEngine] = useState(() => new HermeticTrinitEngine())
   const [hermeticAnalysis, setHermeticAnalysis] = useState<HermeticAnalysis | null>(null)
