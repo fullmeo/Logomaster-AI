@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
+import SessionProvider from '@/components/SessionProvider';
 
 export const metadata = {
   title: 'LogoMaster AI - Créez des logos uniques avec l\'IA',
@@ -13,12 +14,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fr">
       <body className="flex flex-col min-h-screen">
-        <GoogleAnalytics />
-        <Header />
-        <main className="flex-grow">
-          {children}
-        </main>
-        <Footer />
+        <SessionProvider>
+          <GoogleAnalytics />
+          <Header />
+          <main className="flex-grow">
+            {children}
+          </main>
+          <Footer />
+        </SessionProvider>
       </body>
     </html>
   );

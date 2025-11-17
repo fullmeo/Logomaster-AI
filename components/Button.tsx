@@ -3,17 +3,19 @@ import { ButtonHTMLAttributes, ReactNode } from 'react';
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
+  fullWidth?: boolean;
   children: ReactNode;
 }
 
 export default function Button({
   variant = 'primary',
   size = 'md',
+  fullWidth = false,
   children,
   className = '',
   ...props
 }: ButtonProps) {
-  const baseStyles = 'font-medium rounded-lg transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100';
+  const baseStyles = `font-medium rounded-lg transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 ${fullWidth ? 'w-full' : ''}`;
 
   const variants = {
     primary: 'bg-primary-600 text-white hover:bg-primary-700 shadow-md hover:shadow-lg',
