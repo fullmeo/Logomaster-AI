@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
+import { exportAsPNG, exportAsSVG, exportAsPDF, getExportLimits, type LogoExportData } from '@/lib/logoExport';
 
 interface Logo {
   id: string;
@@ -35,6 +36,7 @@ export default function LogosPage() {
   const [filter, setFilter] = useState<'all' | 'favorites'>('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [exportMenuOpen, setExportMenuOpen] = useState<string | null>(null);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -123,6 +125,36 @@ export default function LogosPage() {
     } catch (err) {
       console.error('Error deleting logo:', err);
       setError('Erreur lors de la suppression du logo');
+    }
+  };
+
+  const handleExport = async (logo: Logo, format: 'png' | 'svg' | 'pdf', resolution?: 'standard' | 'high' | 'ultra') => {
+    const exportData: LogoExportData = {
+      companyName: logo.companyName,
+      style: logo.style,
+      colors: logo.colors,
+      shape: logo.shape,
+      size: logo.size,
+      font: logo.font,
+    };
+
+    setExportMenuOpen(null);
+
+    try {
+      switch (format) {
+        case 'png':
+          await exportAsPNG(exportData, resolution || 'standard');
+          break;
+        case 'svg':
+          exportAsSVG(exportData);
+          break;
+        case 'pdf':
+          await exportAsPDF(exportData);
+          break;
+      }
+    } catch (err) {
+      console.error('Export error:', err);
+      setError('Erreur lors de l\'export du logo');
     }
   };
 
@@ -277,12 +309,77 @@ export default function LogosPage() {
                   </p>
 
                   <div className="flex gap-2">
+                    <div className="relative flex-1">
+                      <Button
+                        variant="primary"
+                        className="w-full"
+                        onClick={() => setExportMenuOpen(exportMenuOpen === logo.id ? null : logo.id)}
+                      >
+                        <svg className="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        Exporter
+                      </Button>
+
+                      {exportMenuOpen === logo.id && (
+                        <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-10 overflow-hidden">
+                          <div className="p-2">
+                            <button
+                              onClick={() => handleExport(logo, 'png', 'standard')}
+                              className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                            >
+                              PNG Standard (512px)
+                            </button>
+                            {getExportLimits((session?.user as any)?.tier || 'free').maxResolution !== 'standard' && (
+                              <>
+                                <button
+                                  onClick={() => handleExport(logo, 'png', 'high')}
+                                  className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                                >
+                                  PNG High (1024px)
+                                  {(session?.user as any)?.tier === 'free' && ' 🔒 Pro'}
+                                </button>
+                                <button
+                                  onClick={() => handleExport(logo, 'png', 'ultra')}
+                                  className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                                  disabled={(session?.user as any)?.tier !== 'business'}
+                                >
+                                  PNG Ultra (2048px)
+                                  {(session?.user as any)?.tier !== 'business' && ' 🔒 Business'}
+                                </button>
+                              </>
+                            )}
+                            {getExportLimits((session?.user as any)?.tier || 'free').formats.includes('SVG') && (
+                              <button
+                                onClick={() => handleExport(logo, 'svg')}
+                                className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                              >
+                                SVG (Vectoriel)
+                                {(session?.user as any)?.tier === 'free' && ' 🔒 Pro'}
+                              </button>
+                            )}
+                            {getExportLimits((session?.user as any)?.tier || 'free').formats.includes('PDF') && (
+                              <button
+                                onClick={() => handleExport(logo, 'pdf')}
+                                className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                                disabled={(session?.user as any)?.tier !== 'business'}
+                              >
+                                PDF
+                                {(session?.user as any)?.tier !== 'business' && ' 🔒 Business'}
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                     <Button
                       variant="outline"
-                      className="flex-1"
                       onClick={() => deleteLogo(logo.id)}
+                      title="Supprimer"
                     >
-                      Supprimer
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
                     </Button>
                   </div>
                 </Card>

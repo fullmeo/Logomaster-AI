@@ -44,3 +44,9 @@ temp/
 # API Keys (sécurité)
 config/keys.js
 secrets/
+
+# Database
+*.db
+*.db-journal
+prisma/*.db
+prisma/*.db-journal
