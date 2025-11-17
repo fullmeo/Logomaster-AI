@@ -31,32 +31,48 @@ export default function DashboardPage() {
   }, [status, router]);
 
   useEffect(() => {
-    // Load stats from localStorage (will be replaced with API calls)
-    const history = JSON.parse(localStorage.getItem('logomaster_history') || '[]');
-    const favorites = JSON.parse(localStorage.getItem('logomaster_favorites') || '[]');
+    if (status === 'authenticated') {
+      fetchStats();
+    }
+  }, [status, session]);
 
-    // Calculate generations this month
-    const now = new Date();
-    const thisMonth = history.filter((item: any) => {
-      const itemDate = new Date(item.timestamp);
-      return itemDate.getMonth() === now.getMonth() && itemDate.getFullYear() === now.getFullYear();
-    });
+  const fetchStats = async () => {
+    try {
+      // Fetch logos
+      const logosRes = await fetch('/api/logos');
+      const logosData = await logosRes.json();
+      const logos = logosData.logos || [];
 
-    // Get generation limit based on tier
-    const tier = (session?.user as any)?.tier || 'free';
-    const limits = {
-      free: 10,
-      pro: 100,
-      business: 1000,
-    };
+      // Fetch favorites
+      const favsRes = await fetch('/api/favorites');
+      const favsData = await favsRes.json();
+      const favorites = favsData.favorites || [];
 
-    setStats({
-      totalLogos: history.length,
-      favoriteLogos: favorites.length,
-      generationsThisMonth: thisMonth.length,
-      generationsLimit: limits[tier as keyof typeof limits] || 10,
-    });
-  }, [session]);
+      // Calculate generations this month
+      const now = new Date();
+      const thisMonth = logos.filter((logo: any) => {
+        const logoDate = new Date(logo.createdAt);
+        return logoDate.getMonth() === now.getMonth() && logoDate.getFullYear() === now.getFullYear();
+      });
+
+      // Get generation limit based on tier
+      const tier = (session?.user as any)?.tier || 'free';
+      const limits = {
+        free: 10,
+        pro: 100,
+        business: 1000,
+      };
+
+      setStats({
+        totalLogos: logos.length,
+        favoriteLogos: favorites.length,
+        generationsThisMonth: thisMonth.length,
+        generationsLimit: limits[tier as keyof typeof limits] || 10,
+      });
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    }
+  };
 
   if (status === 'loading') {
     return (
